@@ -1,0 +1,38 @@
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
+
+@Table({
+  tableName: 'my-user',
+  timestamps: true,
+  underscored: true,
+})
+export class User extends Model<User> {
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  name: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
+  email: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  password: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  created_at: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  updated_at: string;
+}
