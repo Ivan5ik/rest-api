@@ -24,4 +24,11 @@ export class User extends Model<User> {
     allowNull: false,
   })
   password: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+    field: 'lastSignIn',
+  })
+  lastSignIn: string;
 }
