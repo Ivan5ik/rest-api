@@ -24,15 +24,4 @@ export class User extends Model<User> {
     allowNull: false,
   })
   password: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  created_at: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  updated_at: string;
 }
