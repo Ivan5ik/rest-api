@@ -4,13 +4,13 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './modules/users/entity/user.entity';
-import { AuthModule } from './modules/users/auth/auth.module';
-import { Auth } from './modules/users/auth/entity/auth.entity';
+import { Auth } from './modules/auth/entity/auth.entity';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
-    UsersModule,
     AuthModule,
+    UsersModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: 'localhost',
