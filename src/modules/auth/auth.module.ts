@@ -5,12 +5,10 @@ import { Auth } from './entity/auth.entity';
 import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
-import { JwtAuthGuard } from './jwtAuthGuard';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Module({
-  providers: [AuthService, JwtAuthGuard, JwtStrategy],
+  providers: [AuthService, JwtAuthGuard],
   exports: [AuthService, PassportModule, JwtModule],
   controllers: [AuthController],
   imports: [
@@ -18,15 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'secret-key',
-      signOptions: { expiresIn: '1h' },
-    }),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'), // Замініть на ваш секретний ключ JWT
-        signOptions: { expiresIn: '1h' },
-      }),
-      inject: [ConfigService],
+      signOptions: { expiresIn: '1d' },
     }),
   ],
 })

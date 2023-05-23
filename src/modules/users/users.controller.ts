@@ -4,18 +4,14 @@ import {
   Get,
   Body,
   Param,
-  HttpStatus,
-  HttpException,
   UseGuards,
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
-import { JwtService } from '@nestjs/jwt';
 import { User } from './entity/user.entity';
 import { AuthService } from '../auth/auth.service';
 import { AuthDto } from '../auth/dto/auth.dto';
-import { JwtAuthGuard } from '../auth/jwtAuthGuard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('user')
 export class UsersController {
@@ -42,21 +38,13 @@ export class UsersController {
   }
 
   @Post('authUser')
-  async authUser(@Body() userDto: AuthDto): Promise<string> {
-    return await this.userForAuth.getTokenSign(userDto);
+  async authUser(@Body() userDto: AuthDto, res: any): Promise<void> {
+    return await this.userForAuth.login(userDto, res);
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard) // Додайте гуард до цього маршруту
-  yourEndpoint(@Req() request: Request) {
-    // Отримайте результат гуарда з об'єкта запиту
-    const isAuthenticated = request; // Припустимо, що це властивість гуарда
-
-    // Використовуйте результат гуарда за потреби
-    if (isAuthenticated) {
-      // Логіка, коли гуард пройшов успішно
-    } else {
-      // Логіка, коли гуард не пройшов успішно
-    }
+  @UseGuards(JwtAuthGuard)
+  async test(@Body() userDto: AuthDto, res: any): Promise<void> {
+    return await this.userForAuth.login(userDto, res);
   }
 }
