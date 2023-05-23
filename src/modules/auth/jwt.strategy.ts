@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ConfigService } from '@nestjs/config';
+import { Strategy, ExtractJwt } from 'passport-jwt';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get('JWT_SECRET'), // Замініть на ваш секретний ключ JWT
+      secretOrKey: 'secret-key',
     });
   }
 
-  async validate(payload: any) {
-    // Цей метод викликається після успішної перевірки JWT.
-    // Ви можете додатково перевірити або отримати дані користувача тут.
-    return { userId: payload.sub, username: payload.username };
+  async validate(payload: any, res: any) {
+    // Добавьте здесь код для проверки токена и возврата объекта пользователя
+    return await this.authService.login(payload, res);
   }
 }
