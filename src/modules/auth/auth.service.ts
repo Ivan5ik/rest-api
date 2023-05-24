@@ -33,22 +33,16 @@ export class AuthService {
     }
   }
 
-  async login(userForAuth: AuthDto, @Res() res: any): Promise<void> {
+  async login(userForAuth: AuthDto): Promise<string> {
     const resultFind = await this.authRepository.findOne<Auth>({
       where: { name: userForAuth.name, password: userForAuth.password },
     });
 
     if (resultFind) {
-      const token = this.jwtService.sign({
+      return this.jwtService.sign({
         name: resultFind.dataValues.name,
         id: resultFind.dataValues.id,
       });
-
-      res.header('Authorization', `Bearer ${token}`);
-      res.send(); // Отправляем пустой ответ
-
-      // Или можно использовать res.json() для отправки объекта вместо пустого ответа
-      // res.json({});
     } else {
       throw new Error('name and password is not valid');
     }

@@ -1,19 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, ExtractJwt } from 'passport-jwt';
-import { AuthService } from './auth.service';
+import { Strategy } from 'passport-local';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly authService: AuthService) {
-    super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'secret-key',
-    });
-  }
-
-  async validate(payload: any, res: any) {
-    // Добавьте здесь код для проверки токена и возврата объекта пользователя
-    return await this.authService.login(payload, res);
+export class LocalStrategy extends PassportStrategy(Strategy) {
+  // this never gets called, created strategy only to register "local" strategy in passport
+  // this is needed for LocalAuthGuard to work
+  async validate(_username: any, _password: any, done: CallableFunction) {
+    done(new Error('Not implemented'));
   }
 }
